@@ -8,7 +8,7 @@ This is how `input()` works in Brython Runner:
 
 1. When `input()` is called, Brython Runner instance in the web worker requests to **open** a data slot in the *hanger* server. Server reserves a space to store the data and returns a *token* for that space.
 1. The instance in the web worker hands over the *token* to the browser's main thread. 
-1. The instance in the web worker then make a synchronous XHR to **read** the data from *hanger* server with the *token*. Since the data is not available yet, the *hanger* server holds the connection until it receives the requested data.
+1. The instance in the web worker then makes a synchronous XHR to **read** the data from *hanger* server with the *token*. Since the data is not available yet, the *hanger* server holds the connection until it receives the requested data.
 1. Meanwhile, Brython Runner instance in the main thread receives the *token* from the web worker instance. The main thread instance then calls the callback function (`options.stdin.readline()`) to collect the data from the user.
 1. When the main thread instance collected the standard input data from the user, it requests to **write** the data in the *hanger* server with the *token*. 
 1. Aha! Now the *hanger* server got the data, so it returns that data for the **read** request from the Brython Runner instance in the web worker that has been on hold for so long. 
@@ -40,7 +40,7 @@ Run server with *host* and *port* options:
 
 ## API
 
-This server application serve a few simple functions. 
+This server application serves a few simple functions. 
 
 #### POST `/hanger/open/`
 
@@ -54,6 +54,6 @@ The server **writes** data to the requested slot according to the *token*. Retur
 
 The server **reads** data from the requested slot according to the *token*. Returns the data as a plain text.
 
-When the requested data slot does not exist, server responds with 404.
+When the requested data slot does not exist, the server responds with 404.
 
-When the requested data slot exists but there is no data written in the slot, server holds the connection and waits until it receives the data for that slot. 
+When the requested data slot exists but there is no data written in the slot, the server holds the connection and waits until it receives the data for that slot. 
